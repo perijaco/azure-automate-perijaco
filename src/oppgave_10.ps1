@@ -9,7 +9,7 @@
 $sum = 17
 # Stopper kjøring av scriptet ved feil
 $ErrorActionPreference = 'Stop'
-$webrequest = Invoke-WebRequest -Uri 'https://azure-gvs-test-cases.azurewebsites.net/api/tapermagnus'
+$webrequest = Invoke-WebRequest -Uri 'http://nav-deckofcards.herokuapp.com/shuffle'
 $kortstokkJson = $webrequest.Content
 
 $kortstokk = ConvertFrom-Json -InputObject $kortstokkJson
@@ -112,3 +112,5 @@ if ((SumPoengKortstokk -kortstokk $magnus) -gt $Blackjack) {
     SkrivUtResultat -Vinner "Meg" -kortStokkMagnus $Magnus -Kortstokkmeg $meg
     exit
 }
+
+SkrivUtResultat -Vinner "Magnus" -kortStokkMagnus $Magnus -kortstokkmeg $meg
