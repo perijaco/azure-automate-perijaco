@@ -9,7 +9,7 @@
 $sum = 17
 # Stopper kjøring av scriptet ved feil
 $ErrorActionPreference = 'Stop'
-$webrequest = Invoke-WebRequest -Uri 'https://azure-gvs-test-cases.azurewebsites.net/api/taperMeg'
+$webrequest = Invoke-WebRequest -Uri 'https://azure-gvs-test-cases.azurewebsites.net/api/tapermagnus'
 $kortstokkJson = $webrequest.Content
 
 $kortstokk = ConvertFrom-Json -InputObject $kortstokkJson
@@ -45,19 +45,6 @@ function SumPoengKortstokk {
     }
    return $poengKortstokk
 }
-function SkrivUtResultat {
-    param (
-        [string]
-        $Vinner,
-        [Object[]]
-        $kortStokkMagnus,
-        [Object[]]
-        $Kortstokkmeg
-    )
-    Write-Host "Vinner er : $Vinner"
-    Write-Host "Magnus : | $(SumPoengKortstokk -kortstokk $kortStokkMagnus) | $(kortstokkTilStreng -kortstokk $kortStokkMagnus)"
-    Write-Host "Meg :   | $(sumpoengkortstokk -kortstokk $Kortstokkmeg) |  $(kortstokkTilStreng -kortstokk $Kortstokkmeg)"
-}
 
 
 
@@ -74,11 +61,12 @@ $kortstokk = $kortstokk[2..$kortstokk.Length]
 #write-host "Kortstokk : $(kortstokkTilStreng -kortstokk $kortstokk)"
 
 
+
 #Definerer variabel Blackjack til 21
 $Blackjack = 21
 
 
-if (((SumPoengKortstokk -kortstokk $Magnus) -eq $Blackjack) -and ((SumPoengKortstokk -kortstokk $meg) -eq $Blackjack)){
+if (((SumPoengKortstokk -kortstokk $Meg) -eq $Blackjack) -and ((SumPoengKortstokk -kortstokk $Magnus) -eq $Blackjack)){
 SkrivUtResultat -Vinner "Uavgjort" -kortStokkMagnus $magnus -Kortstokkmeg $meg
 exit 
 }
@@ -93,7 +81,7 @@ elseif ((SumPoengKortstokk -kortstokk $Magnus) -eq $Blackjack) {
    Exit 
 }
 
-while ((SumPoengKortstokk -kortstokk $meg) -le $sum) {
+while ((SumPoengKortstokk -kortstokk $meg) -lt $sum) {
     $meg += $kortstokk[0]
     $kortstokk = $kortstokk[1..$kortstokk.Length]    
 }
@@ -103,3 +91,12 @@ if ((SumPoengKortstokk -kortstokk $meg) -gt $Blackjack) {
     exit
     }
 
+while((SumPoengKortstokk -kortstokk $Magnus) -le (SumPoengKortstokk -kortstokk $meg)) {
+    $Magnus += $kortstokk[0]
+    $kortstokk = $kortstokk[1..$kortstokk.Length]
+    }
+
+if ((SumPoengKortstokk -kortstokk $magnus) -gt $Blackjack) {
+    SkrivUtResultat -Vinner "Meg" -kortStokkMagnus $Magnus -Kortstokkmeg $meg
+    exit
+}
