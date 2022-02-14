@@ -58,6 +58,7 @@ function SkrivUtResultat {
     Write-Host "Vinner er : $Vinner"
     Write-Host "Magnus : | $(SumPoengKortstokk -kortstokk $kortStokkMagnus) | $(kortstokkTilStreng -kortstokk $kortStokkMagnus)"
     Write-Host "Meg :   | $(sumpoengkortstokk -kortstokk $Kortstokkmeg) |  $(kortstokkTilStreng -kortstokk $Kortstokkmeg)"
+    write-host "Kortstokk : $(kortstokkTilStreng -kortstokk $kortstokk)"
 }
 
 Write-Output "Kortstokk: $(kortstokkTilStreng -kortstokk $kortstokk)"
@@ -114,3 +115,4 @@ if ((SumPoengKortstokk -kortstokk $magnus) -gt $Blackjack) {
 }
 
 SkrivUtResultat -Vinner "Magnus" -kortStokkMagnus $Magnus -kortstokkmeg $meg
+
